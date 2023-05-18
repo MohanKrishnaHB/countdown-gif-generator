@@ -19,11 +19,11 @@
     <script>
         function getTimeFormated(time) {
             const year = time.getFullYear()
-            const day = ("0" + time.getDate()).slice(-2);
-            const month = ("0" + (time.getMonth() + 1)).slice(-2);
-            const hours = ("0" + (time.getHours() + 1)).slice(-2);
-            const minutes = ("0" + (time.getMinutes() + 1)).slice(-2);
-            const seconds = ("0" + (time.getSeconds() + 1)).slice(-2);
+            const day = time.getDate() < 10 ? `0${time.getDate()}` : time.getDate();
+            const month = (time.getMonth() + 1) < 10 ? `0${time.getMonth() + 1}` : (time.getMonth() + 1);
+            const hours = time.getHours() < 10 ? `0${time.getHours()}` : time.getHours();
+            const minutes = time.getMinutes() < 10 ? `0${time.getMinutes()}` : time.getMinutes();
+            const seconds = time.getSeconds() < 10 ? `0${time.getSeconds()}` : time.getSeconds();
             return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`
         }
         function setInitialValues() {
@@ -41,7 +41,8 @@
 
             let eventDate = new Date();
             eventDate.setDate(eventDate.getDate() + 20);
-
+            console.log(eventDate);
+            console.log(getTimeFormated(eventDate));
             $("input#event-date").val(getTimeFormated(eventDate));
 
             $("input#expire-text").val(expireText);
