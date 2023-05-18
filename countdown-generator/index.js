@@ -20,9 +20,9 @@ module.exports = {
      */
     init: function(time, width=390, height=140, color='363636', bg='ffffff', name='default', frames=30, cb, expiredText='Event Ended', timeFontSize="60", timeWordsFontSize="14", experiedTextFontSize="40", strokColor="DFE4EA", hasSeconds=true, daysText="DAYS", hoursText="HOURS", minsText="MINS", secondsText="SECONDS"){
         // Set some sensible upper / lower bounds
-        this.hasSeconds = hasSeconds;
+        this.hasSeconds = hasSeconds == "true" ? true : false;
 
-        this.width = this.hasSeconds == "true" ? this.clamp(width+130, 150, 700) : this.clamp(width, 150, 700);
+        this.width = this.hasSeconds ? this.clamp(width+130, 150, 700) : this.clamp(width, 150, 700);
         this.height = this.clamp(height, 150, 500);
         this.frames = this.clamp(frames, 1, 1500);
 
