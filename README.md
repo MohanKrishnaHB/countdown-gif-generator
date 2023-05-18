@@ -31,3 +31,16 @@ Tested with and designed for:
 ## License
 
 [MIT](LICENSE)
+
+
+## Creating Docker Image and pushing
+
+Build Docer image
+* docker build -t <image-name> .
+
+Creating tag
+* docker tag <image-name> <username>/<image-name>
+
+Create Docker container/Run
+* docker run -p 3000:8080 <image-name>
+

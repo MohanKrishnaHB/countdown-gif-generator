@@ -21,21 +21,20 @@ app.get('/', function (req, res) {
 
 // generate and download the gif
 app.get('/generate', function (req, res) {
-    let {time, width, height, color, bg, name, frames, expiredText, timeFontSize, timeWordsFontSize, experiedTextFontSize, strokColor} = req.query;
+    let {time, width, height, color, bg, name, frames, expiredText, timeFontSize, timeWordsFontSize, experiedTextFontSize, strokColor, hasSeconds, daysText, hoursText, minsText, secondsText} = req.query;
 
     if(!time){
         throw Error('Time parameter is required.');
     }
-
     CountdownGenerator.init(time, width, height, color, bg, name, frames, () => {
         let filePath = tmpDir + name + '.gif';
         res.download(filePath);
-    }, expiredText, timeFontSize, timeWordsFontSize, experiedTextFontSize, strokColor);
+    }, expiredText, timeFontSize, timeWordsFontSize, experiedTextFontSize, strokColor, hasSeconds, daysText, hoursText, minsText, secondsText);
 });
 
 // serve the gif to a browser
 app.get('/serve', function (req, res) {
-    let {time, width, height, color, bg, name, frames, expiredText, timeFontSize, timeWordsFontSize, experiedTextFontSize, strokColor} = req.query;
+    let {time, width, height, color, bg, name, frames, expiredText, timeFontSize, timeWordsFontSize, experiedTextFontSize, strokColor, hasSeconds, daysText, hoursText, minsText, secondsText} = req.query;
 
     if(!time){
         throw Error('Time parameter is required.');
@@ -44,7 +43,7 @@ app.get('/serve', function (req, res) {
     CountdownGenerator.init(time, width, height, color, bg, name, frames, () => {
         let filePath = tmpDir + name + '.gif';
         res.sendFile(filePath);
-    }, expiredText, timeFontSize, timeWordsFontSize, experiedTextFontSize, strokColor);
+    }, expiredText, timeFontSize, timeWordsFontSize, experiedTextFontSize, strokColor, hasSeconds, daysText, hoursText, minsText, secondsText);
 });
 
 app.listen(process.env.PORT || 8080, function(){

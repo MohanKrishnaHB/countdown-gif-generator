@@ -18,12 +18,14 @@ module.exports = {
      * @param {number} frames
      * @param {requestCallback} cb - The callback that is run once complete.
      */
-    init: function(time, width=390, height=140, color='363636', bg='ffffff', name='default', frames=30, cb, expiredText='Event Ended', timeFontSize="60", timeWordsFontSize="14", experiedTextFontSize="40", strokColor="DFE4EA"){
+    init: function(time, width=390, height=140, color='363636', bg='ffffff', name='default', frames=30, cb, expiredText='Event Ended', timeFontSize="60", timeWordsFontSize="14", experiedTextFontSize="40", strokColor="DFE4EA", hasSeconds=true, daysText="DAYS", hoursText="HOURS", minsText="MINS", secondsText="SECONDS"){
         // Set some sensible upper / lower bounds
-        this.width = this.clamp(width, 150, 500);
+        this.hasSeconds = hasSeconds;
+
+        this.width = this.hasSeconds == "true" ? this.clamp(width+130, 150, 700) : this.clamp(width, 150, 700);
         this.height = this.clamp(height, 150, 500);
         this.frames = this.clamp(frames, 1, 1500);
-        
+
         this.bg = '#' + bg;
         this.textColor = '#' + color;
         this.strokColor = '#' + strokColor;
@@ -42,7 +44,12 @@ module.exports = {
         this.timeWordsFontSize = timeWordsFontSize;
         this.experiedTextFontSize = experiedTextFontSize;
 
-        this.fontFamily = "";
+        this.daysText = daysText;
+        this.hoursText = hoursText;
+        this.minsText = minsText;
+        this.secondsText = secondsText;
+
+        this.fontFamily = "helvetica";
 
         // calculate the time difference (if any)
         let timeResult = this.time(time);
@@ -158,6 +165,8 @@ module.exports = {
                     ctx.fillText(days, 75, 60);
                     ctx.fillText(hours, 195, 60);
                     ctx.fillText(minutes, 315, 60);
+                    if(this.hasSeconds)
+                        ctx.fillText(seconds, 435, 60);
 
                     
                     let fontWeight = "bold"
@@ -168,9 +177,11 @@ module.exports = {
                     // set the font style
                     ctx.font = [fontWeight, fontSize, fontFamily].join(' ');
                     
-                    ctx.fillText("DAYS", 75, 105);
-                    ctx.fillText("HOURS", 195, 105);
-                    ctx.fillText("MINS", 315, 105);
+                    ctx.fillText(this.daysText, 75, 105);
+                    ctx.fillText(this.hoursText, 195, 105);
+                    ctx.fillText(this.minsText, 315, 105);
+                    if(this.hasSeconds)
+                        ctx.fillText(this.secondsText, 435, 105);
 
                     ctx.strokeStyle = this.strokColor;
                     ctx.beginPath();
@@ -183,6 +194,14 @@ module.exports = {
                     ctx.moveTo(256, 25);
                     ctx.lineTo(256, 115);
                     ctx.stroke();
+                    
+                    if(this.hasSeconds) {
+                        ctx.beginPath();
+                        ctx.moveTo(377, 25);
+                        ctx.lineTo(377, 115);
+                        ctx.stroke();
+                    }
+
                     ctx.fillStyle = this.textColor;
                     
                     fontWeight = "bold"
