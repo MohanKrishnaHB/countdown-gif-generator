@@ -12,18 +12,22 @@
     <style>
         body {
             width: 100%;
-            background: rgb(108,117,125);
-            background: linear-gradient(90deg, rgba(108,117,125,1) 50%, rgba(33,37,41,1) 50%);
+            background: rgb(108, 117, 125);
+            background: linear-gradient(90deg, rgba(108, 117, 125, 1) 50%, rgba(33, 37, 41, 1) 50%);
         }
     </style>
     <script>
+        const width = {
+            withSecond: 520,
+            withoutSecond: 390
+        }
         function getTimeFormated(time) {
             const year = time.getFullYear()
-            const day = ("0" + time.getDate()).slice(-2);
-            const month = ("0" + (time.getMonth() + 1)).slice(-2);
-            const hours = ("0" + (time.getHours() + 1)).slice(-2);
-            const minutes = ("0" + (time.getMinutes() + 1)).slice(-2);
-            const seconds = ("0" + (time.getSeconds() + 1)).slice(-2);
+            const day = time.getDate() < 10 ? `0${time.getDate()}` : time.getDate();
+            const month = (time.getMonth() + 1) < 10 ? `0${time.getMonth() + 1}` : (time.getMonth() + 1);
+            const hours = time.getHours() < 10 ? `0${time.getHours()}` : time.getHours();
+            const minutes = time.getMinutes() < 10 ? `0${time.getMinutes()}` : time.getMinutes();
+            const seconds = time.getSeconds() < 10 ? `0${time.getSeconds()}` : time.getSeconds();
             return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`
         }
         function setInitialValues() {
@@ -35,13 +39,19 @@
 
             const timeFontSize = "60";
             const textFontSize = "14";
-            const expireRextFontSize = "40";
+            const expireRextFontSize = "25";
 
-            const frame = "180";
+            const frame = "30";
+
+            const hasSeconds = true;
+
+            const daysText = "DAYS";
+            const hoursText = "HOURS";
+            const minsText = "MINS";
+            const secondsText = "SECONDS";
 
             let eventDate = new Date();
             eventDate.setDate(eventDate.getDate() + 20);
-
             $("input#event-date").val(getTimeFormated(eventDate));
 
             $("input#expire-text").val(expireText);
@@ -55,7 +65,15 @@
             $("input#expire-text-font-size").val(expireRextFontSize);
 
             $("input#frame").val(frame);
-            onFieldChange()
+
+            $("input#hasSeconds").attr("checked", hasSeconds);
+            
+            $("input#days-text").val(daysText);
+            $("input#hours-text").val(hoursText);
+            $("input#mins-text").val(minsText);
+            $("input#seconds-text").val(secondsText);
+
+            onFieldChange();
         }
         $(document).ready(function () {
             setInitialValues();
@@ -74,6 +92,12 @@
             const textFontSize = $("input#text-font-size").val();
             const expireRextFontSize = $("input#expire-text-font-size").val();
             const frame = $("input#frame").val();
+            const hasSeconds = $("input#hasSeconds").is(":checked");
+
+            const daysText = $("input#days-text").val();
+            const hoursText = $("input#hours-text").val();
+            const minsText = $("input#mins-text").val();
+            const secondsText = $("input#seconds-text").val();
 
             let queryParams = `name=eventGif`;
             queryParams = `${queryParams}&expiredText=${expiredText}`;
@@ -85,15 +109,26 @@
             queryParams = `${queryParams}&experiedTextFontSize=${expireRextFontSize}`;
             queryParams = `${queryParams}&frames=${frame}`;
             queryParams = `${queryParams}&time=${getTimeFormated(new Date(eventTime))}`;
-            const finalURL = `${window.location.origin}/generate?${queryParams}`;
+            queryParams = `${queryParams}&hasSeconds=${hasSeconds}`;
+            queryParams = `${queryParams}&daysText=${daysText}`;
+            queryParams = `${queryParams}&hoursText=${hoursText}`;
+            queryParams = `${queryParams}&minsText=${minsText}`;
+            queryParams = `${queryParams}&secondsText=${secondsText}`;
+            
+            const finalURL = `${window.location.origin}/serve?${queryParams}`;
             $("#image-container").html(`<img src="${finalURL}" id="generated-gif"/>`);
 
-            $("input#embed-code").val(`<img src="${finalURL}" width="390" height="140"/>`)
+            $("input#embed-code").val(`<img src="${finalURL}" width="${hasSeconds ? width.withSecond : width.withoutSecond}" height="140"/>`)
+
+            $("input#gif-url").val(finalURL);
 
             $("#result-container").show();
         }
         function copyEmbedCode() {
             navigator.clipboard.writeText($("input#embed-code").val());
+        }
+        function copyGifURL() {
+            navigator.clipboard.writeText($("input#gif-url").val());
         }
     </script>
 </head>
@@ -103,14 +138,14 @@
         <h1><span class="text-dark">Countown</span> <span class="text-secondary">Generator</span></h1>
     </div>
     <div class="row m-0" style="width: 100%">
-        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 bg-secondary text-light">
+        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-xs-12 bg-secondary text-light">
             <div class="pt-5 pb-5 px-4">
                 <div class="mb-3 mt-3">
-                    <label for="event-date" class="form-label">Event Date:</label>
+                    <label for="event-date" class="form-label">Event Date :</label>
                     <input type="datetime-local" class="form-control" id="event-date" onchange="onFieldChange()">
                 </div>
                 <div class="mb-3 mt-3">
-                    <label for="expire-text" class="form-label">Expire Text:</label>
+                    <label for="expire-text" class="form-label">Expire Text :</label>
                     <input type="text" class="form-control" id="expire-text" onchange="onFieldChange()">
                 </div>
                 <fieldset class="mb-3 mt-3">
@@ -118,25 +153,30 @@
                     <div class="row">
                         <div class="col-lg-4 col-md-6 col-sm-4 col-xs-4">
                             <div class="">
-                                <label for="bg-color" class="form-label">Background Color:</label>
+                                <label for="bg-color" class="form-label">Background Color :</label>
                                 <input type="color" class="form-control" id="bg-color" onchange="onFieldChange()">
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-6 col-sm-4 col-xs-4">
                             <div class="">
-                                <label for="text-color" class="form-label">Text Color:</label>
+                                <label for="text-color" class="form-label">Text Color :</label>
                                 <input type="color" class="form-control" id="text-color" onchange="onFieldChange()">
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-6 col-sm-4 col-xs-4">
                             <div class="">
-                                <label for="stroke-color" class="form-label">Line Color:</label>
+                                <label for="stroke-color" class="form-label">Line Color :</label>
                                 <input type="color" class="form-control" id="stroke-color" onchange="onFieldChange()">
                             </div>
                         </div>
                     </div>
                 </fieldset>
-                <div id="accordion" class="mt-5">
+                <div class="form-check mt-4">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" name="seconds" id="hasSeconds" onchange="onFieldChange()"> Display Seconds
+                    </label>
+                </div>
+                <div id="accordion" class="mt-4">
                     <div class="card bg-secondary text-light border">
                         <div class="card-header">
                             <a class="btn text-light" data-bs-toggle="collapse" href="#collapseOne">
@@ -145,32 +185,62 @@
                         </div>
                         <div id="collapseOne" class="collapse" data-bs-parent="#accordion">
                             <div class="card-body bg-secondary">
+                                <fieldset class="mb-3">
+                                    <legend>Time Text</legend>
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-sm-4 col-xs-4 mb-3">
+                                            <div class="">
+                                                <label for="days-text" class="form-label">Days :</label>
+                                                <input type="text" class="form-control" id="days-text" onchange="onFieldChange()"> 
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-4 col-xs-4 mb-3">
+                                            <div class="">
+                                                <label for="hours-text" class="form-label">Hours :</label>
+                                                <input type="text" class="form-control" id="hours-text" onchange="onFieldChange()">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-4 col-xs-4 mb-3">
+                                            <div class="">
+                                                <label for="mins-text" class="form-label">Minutes :</label>
+                                                <input type="text" class="form-control" id="mins-text" onchange="onFieldChange()">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-4 col-xs-4 mb-3">
+                                            <div class="">
+                                                <label for="seconds-text" class="form-label">Seconds :</label>
+                                                <input type="text" class="form-control" id="seconds-text" onchange="onFieldChange()">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
                                 <fieldset class="mb-3 mt-3">
                                     <legend>Font</legend>
                                     <div class="row">
                                         <div class="col-lg-4 col-md-6 col-sm-4 col-xs-4">
                                             <div class="">
-                                                <label for="time-font-size" class="form-label">Time Font Size:</label>
+                                                <label for="time-font-size" class="form-label">Time Font Size :</label>
                                                 <div class="input-group mb-3">
-                                                    <input type="number" class="form-control" min="1" max="80" id="time-font-size"
-                                                        onchange="onFieldChange()">
+                                                    <input type="number" class="form-control" min="1" max="80"
+                                                        id="time-font-size" onchange="onFieldChange()">
                                                     <span class="input-group-text">px</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-lg-4 col-md-6 col-sm-4 col-xs-4">
                                             <div class="">
-                                                <label for="text-font-size" class="form-label">Text Font Size:</label>
+                                                <label for="text-font-size" class="form-label">Text Font Size :</label>
                                                 <div class="input-group mb-3">
-                                                    <input type="number" class="form-control" min="1" max="25" id="text-font-size"
-                                                        onchange="onFieldChange()">
+                                                    <input type="number" class="form-control" min="1" max="25"
+                                                        id="text-font-size" onchange="onFieldChange()">
                                                     <span class="input-group-text">px</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-lg-4 col-md-6 col-sm-4 col-xs-4">
                                             <div class="">
-                                                <label for="expire-text-font-size" class="form-label">Expire Text Font Size:</label>
+                                                <label for="expire-text-font-size" class="form-label">Expire Text Font
+                                                    Size :</label>
                                                 <div class="input-group mb-3">
                                                     <input type="number" class="form-control" min="1" max="100"
                                                         id="expire-text-font-size" onchange="onFieldChange()">
@@ -181,8 +251,9 @@
                                     </div>
                                 </fieldset>
                                 <div class="mb-3 mt-3">
-                                    <label for="frame" class="form-label">Frames:</label>
-                                    <input type="number" class="form-control" id="frame" min="1" max="300" onchange="onFieldChange()">
+                                    <label for="frame" class="form-label">Frames :</label>
+                                    <input type="number" class="form-control" id="frame" min="1" max="300"
+                                        onchange="onFieldChange()">
                                 </div>
                             </div>
                         </div>
@@ -190,16 +261,23 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 bg-dark text-light">
+        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-xs-12 bg-dark text-light">
             <div class="pt-5 pb-5 px-4" id="result-container">
-                <div class="d-flex justify-content-center pt-0 pt-lg-5 pt-md-5" id="image-container">
+                <div class="d-flex justify-content-center pt-0 pt-lg-5 pt-md-5 pb-2" id="image-container">
                     <img src="" id="generated-gif" />
                 </div>
-                <div class="d-flex justify-content-center flex-column pt-0 pt-lg-5 pt-md-5 mt-5">
-                    <label for="frame" class="embed-code">Embed Code:</label>
-                    <div class="input-group mb-3 mt-1">
+                <div class="d-flex justify-content-center flex-column pt-0 pt-lg-3 pt-md-3 mt-3">
+                    <label for="embed-code">Embed Code :</label>
+                    <div class="input-group mt-1">
                         <input type="text" class="form-control" id="embed-code" disabled>
                         <button class="btn btn-secondary" onclick="copyEmbedCode()">Copy</button>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center flex-column pt-0 pt-lg-3 pt-md-3 mt-3">
+                    <label for="gif-url">GIF URL :</label>
+                    <div class="input-group mt-1">
+                        <input type="text" class="form-control" id="gif-url" disabled>
+                        <button class="btn btn-secondary" onclick="copyGifURL()">Copy</button>
                     </div>
                 </div>
             </div>
