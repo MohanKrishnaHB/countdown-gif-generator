@@ -23,7 +23,7 @@ module.exports = {
         this.hasSeconds = hasSeconds == "true" ? true : false;
 
         this.width = this.hasSeconds ? this.clamp(width+130, 150, 700) : this.clamp(width, 150, 700);
-        this.height = this.clamp(height, 150, 500);
+        this.height = this.clamp(height, 40, 500);
         this.frames = this.clamp(frames, 1, 1500);
 
         this.bg = '#' + bg;
@@ -122,6 +122,9 @@ module.exports = {
         let fontSize = this.timeFontSize + 'px';
         let fontFamily = this.fontFamily; // monospace works slightly better
         
+        this.timeStartHeight = (this.height / 2) - 20;
+        this.textStartHeight = (this.height / 2) + (parseInt(this.timeFontSize) / 3) + 10;
+        
         // set the font style
         ctx.font = [fontWeight, fontSize, fontFamily].join(' ');
         ctx.textAlign = 'center';
@@ -161,46 +164,76 @@ module.exports = {
                 ctx.fillStyle = this.textColor;
                 // ctx.fillText(string, this.halfWidth, this.halfHeight);  //To be uncommented
 
-                if(days >= 0){    /**Custom Start */
-                    ctx.fillText(days, 75, 60);
-                    ctx.fillText(hours, 195, 60);
-                    ctx.fillText(minutes, 315, 60);
-                    if(this.hasSeconds)
-                        ctx.fillText(seconds, 435, 60);
-
-                    
-                    let fontWeight = "bold"
-                    // let fontSize = Math.floor(this.width / 10) + 'px';
-                    let fontSize = this.timeWordsFontSize + 'px';
-                    let fontFamily = this.fontFamily; // monospace works slightly better
-                    
-                    // set the font style
-                    ctx.font = [fontWeight, fontSize, fontFamily].join(' ');
-                    
-                    ctx.fillText(this.daysText, 75, 105);
-                    ctx.fillText(this.hoursText, 195, 105);
-                    ctx.fillText(this.minsText, 315, 105);
-                    if(this.hasSeconds)
-                        ctx.fillText(this.secondsText, 435, 105);
-
-                    ctx.strokeStyle = this.strokColor;
-                    ctx.beginPath();
-                    ctx.moveTo(135, 25);
-                    ctx.lineTo(135, 115);
-                    ctx.stroke();
-
-                    
-                    ctx.beginPath();
-                    ctx.moveTo(256, 25);
-                    ctx.lineTo(256, 115);
-                    ctx.stroke();
-                    
+                if(days >= 0){    
                     if(this.hasSeconds) {
+                        ctx.fillText(days, (this.width / 2) - ((this.width / 2) / 2) - (((this.width / 2) / 2) / 2), this.timeStartHeight);
+                        ctx.fillText(hours, (this.width / 2) - ((this.width / 2) / 2) + (((this.width / 2) / 2) / 2), this.timeStartHeight);
+                        ctx.fillText(minutes, (this.width / 2) + ((this.width / 2) / 2) - (((this.width / 2) / 2) / 2), this.timeStartHeight);
+                        ctx.fillText(seconds, (this.width / 2) + ((this.width / 2) / 2) + (((this.width / 2) / 2) / 2), this.timeStartHeight);
+
+                        
+                        let fontWeight = "bold"
+                        // let fontSize = Math.floor(this.width / 10) + 'px';
+                        let fontSize = this.timeWordsFontSize + 'px';
+                        let fontFamily = this.fontFamily; // monospace works slightly better
+                        
+                        // set the font style
+                        ctx.font = [fontWeight, fontSize, fontFamily].join(' ');
+                        
+                        ctx.fillText(this.daysText, (this.width / 2) - ((this.width / 2) / 2) - (((this.width / 2) / 2) / 2), this.textStartHeight);
+                        ctx.fillText(this.hoursText, (this.width / 2) - ((this.width / 2) / 2) + (((this.width / 2) / 2) / 2), this.textStartHeight);
+                        ctx.fillText(this.minsText, (this.width / 2) + ((this.width / 2) / 2) - (((this.width / 2) / 2) / 2), this.textStartHeight);
+                        ctx.fillText(this.secondsText, (this.width / 2) + ((this.width / 2) / 2) + (((this.width / 2) / 2) / 2), this.textStartHeight);
+
+                        ctx.strokeStyle = this.strokColor;
                         ctx.beginPath();
-                        ctx.moveTo(377, 25);
-                        ctx.lineTo(377, 115);
+                        ctx.moveTo((this.width / 4), 20);
+                        ctx.lineTo((this.width / 4), 120);
+                        ctx.stroke();
+
+                        
+                        ctx.beginPath();
+                        ctx.moveTo(this.width / 2, 20);
+                        ctx.lineTo(this.width / 2, 120);
+                        ctx.stroke();
+                        
+                        ctx.beginPath();
+                        ctx.moveTo((this.width * 3 / 4), 20);
+                        ctx.lineTo((this.width * 3 / 4), 120);
                         ctx.stroke();
                     }
+                    else {
+                        ctx.fillText(days, (this.width / 2) - 130, this.timeStartHeight);
+                        ctx.fillText(hours, this.width / 2, this.timeStartHeight);
+                        ctx.fillText(minutes, this.width / 2 + 130, this.timeStartHeight);
+
+                        
+                        let fontWeight = "bold"
+                        // let fontSize = Math.floor(this.width / 10) + 'px';
+                        let fontSize = this.timeWordsFontSize + 'px';
+                        let fontFamily = this.fontFamily; // monospace works slightly better
+                        
+                        // set the font style
+                        ctx.font = [fontWeight, fontSize, fontFamily].join(' ');
+                        
+                        ctx.fillText(this.daysText, this.width / 2 - 130, this.textStartHeight);
+                        ctx.fillText(this.hoursText, this.width / 2, this.textStartHeight);
+                        ctx.fillText(this.minsText, this.width / 2 + 130, this.textStartHeight);
+
+                        ctx.strokeStyle = this.strokColor;
+                        ctx.beginPath();
+                        ctx.moveTo(this.width / 2 - 65, 20);
+                        ctx.lineTo(this.width / 2 - 65, 120);
+                        ctx.stroke();
+
+                        
+                        ctx.beginPath();
+                        ctx.moveTo(this.width / 2 + 65, 20);
+                        ctx.lineTo(this.width / 2 + 65, 120);
+                        ctx.stroke();
+                    }
+                    /**Custom Start */
+                    
 
                     ctx.fillStyle = this.textColor;
                     

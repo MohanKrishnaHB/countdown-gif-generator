@@ -31,15 +31,15 @@
             return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`
         }
         function setInitialValues() {
-            const expireText = "Event Time Eneded";
+            const expireText = "Event Time Ended";
 
             const backgroundColor = "#ffffff";
             const textColor = "#363636";
             const strokeColor = "#DFE4EA";
 
-            const timeFontSize = "60";
-            const textFontSize = "14";
-            const expireRextFontSize = "25";
+            const timeFontSize = "80";
+            const textFontSize = "18";
+            const expireRextFontSize = "40";
 
             const frame = "30";
 
@@ -118,7 +118,8 @@
             const finalURL = `${window.location.origin}/serve?${queryParams}`;
             $("#image-container").html(`<img src="${finalURL}" id="generated-gif"/>`);
 
-            $("input#embed-code").val(`<img src="${finalURL}" width="${hasSeconds ? width.withSecond : width.withoutSecond}" height="140"/>`)
+            // $("input#embed-code").val(`<img src="${finalURL}" width="${hasSeconds ? width.withSecond : width.withoutSecond}" height="140"/>`)
+            $("input#embed-code").val(`<img src="${finalURL}"/>`)
 
             $("input#gif-url").val(finalURL);
 
@@ -135,7 +136,7 @@
 
 <body>
     <div class="text-center text-light heading mt-2">
-        <h1><span class="text-dark">Countown</span> <span class="text-secondary">Generator</span></h1>
+        <h1><span class="text-dark" style="position: relative;left: -20px">Countdown</span><span class="text-secondary">Generator</span></h1>
     </div>
     <div class="row m-0" style="width: 100%">
         <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-xs-12 bg-secondary text-light">
@@ -221,7 +222,7 @@
                                             <div class="">
                                                 <label for="time-font-size" class="form-label">Time Font Size :</label>
                                                 <div class="input-group mb-3">
-                                                    <input type="number" class="form-control" min="1" max="80"
+                                                    <input type="number" class="form-control" min="1" max="90"
                                                         id="time-font-size" onchange="onFieldChange()">
                                                     <span class="input-group-text">px</span>
                                                 </div>
@@ -231,7 +232,7 @@
                                             <div class="">
                                                 <label for="text-font-size" class="form-label">Text Font Size :</label>
                                                 <div class="input-group mb-3">
-                                                    <input type="number" class="form-control" min="1" max="25"
+                                                    <input type="number" class="form-control" min="1" max="30"
                                                         id="text-font-size" onchange="onFieldChange()">
                                                     <span class="input-group-text">px</span>
                                                 </div>
