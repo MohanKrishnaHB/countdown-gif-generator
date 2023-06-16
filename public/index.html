@@ -35,20 +35,16 @@
 
             const backgroundColor = "#ffffff";
             const textColor = "#363636";
-            const strokeColor = "#DFE4EA";
+            const strokeColor1 = "#DFE4EA";
+            const strokeColor2 = "#2C66B4";
 
-            const timeFontSize = "80";
-            const textFontSize = "18";
+            const timeFontSize = "60";
+            const textFontSize = "16";
             const expireRextFontSize = "40";
 
             const frame = "30";
 
             const hasSeconds = true;
-
-            const daysText = "DAYS";
-            const hoursText = "HOURS";
-            const minsText = "MINS";
-            const secondsText = "SECONDS";
 
             let eventDate = new Date();
             eventDate.setDate(eventDate.getDate() + 20);
@@ -58,7 +54,8 @@
 
             $("input#bg-color").val(backgroundColor);
             $("input#text-color").val(textColor);
-            $("input#stroke-color").val(strokeColor);
+            $("input#stroke1-color").val(strokeColor1);
+            $("input#stroke2-color").val(strokeColor2);
 
             $("input#time-font-size").val(timeFontSize);
             $("input#text-font-size").val(textFontSize);
@@ -67,11 +64,6 @@
             $("input#frame").val(frame);
 
             $("input#hasSeconds").attr("checked", hasSeconds);
-            
-            $("input#days-text").val(daysText);
-            $("input#hours-text").val(hoursText);
-            $("input#mins-text").val(minsText);
-            $("input#seconds-text").val(secondsText);
 
             onFieldChange();
         }
@@ -87,39 +79,32 @@
             const expiredText = $("input#expire-text").val();
             const backgroundColor = $("input#bg-color").val().replace("#", "");
             const textColor = $("input#text-color").val().replace("#", "");
-            const strokeColor = $("input#stroke-color").val().replace("#", "");
+            const strokeColor1 = $("input#stroke1-color").val().replace("#", "");
+            const strokeColor2 = $("input#stroke2-color").val().replace("#", "");
             const timeFontSize = $("input#time-font-size").val();
             const textFontSize = $("input#text-font-size").val();
             const expireRextFontSize = $("input#expire-text-font-size").val();
             const frame = $("input#frame").val();
             const hasSeconds = $("input#hasSeconds").is(":checked");
 
-            const daysText = $("input#days-text").val();
-            const hoursText = $("input#hours-text").val();
-            const minsText = $("input#mins-text").val();
-            const secondsText = $("input#seconds-text").val();
-
             let queryParams = `name=eventGif`;
             queryParams = `${queryParams}&expiredText=${expiredText}`;
             queryParams = `${queryParams}&bg=${backgroundColor}`;
             queryParams = `${queryParams}&color=${textColor}`;
-            queryParams = `${queryParams}&strokColor=${strokeColor}`;
+            queryParams = `${queryParams}&strok1Color=${strokeColor1}`;
+            queryParams = `${queryParams}&strok2Color=${strokeColor2}`;
             queryParams = `${queryParams}&timeFontSize=${timeFontSize}`;
             queryParams = `${queryParams}&timeWordsFontSize=${textFontSize}`;
             queryParams = `${queryParams}&experiedTextFontSize=${expireRextFontSize}`;
             queryParams = `${queryParams}&frames=${frame}`;
             queryParams = `${queryParams}&time=${getTimeFormated(new Date(eventTime))}`;
             queryParams = `${queryParams}&hasSeconds=${hasSeconds}`;
-            queryParams = `${queryParams}&daysText=${daysText}`;
-            queryParams = `${queryParams}&hoursText=${hoursText}`;
-            queryParams = `${queryParams}&minsText=${minsText}`;
-            queryParams = `${queryParams}&secondsText=${secondsText}`;
             
             const finalURL = `${window.location.origin}/serve?${queryParams}`;
-            $("#image-container").html(`<img src="${finalURL}" id="generated-gif"/>`);
+            $("#image-container").html(`<img src="${finalURL}" id="generated-gif" width="100%"/>`);
 
             // $("input#embed-code").val(`<img src="${finalURL}" width="${hasSeconds ? width.withSecond : width.withoutSecond}" height="140"/>`)
-            $("input#embed-code").val(`<img src="${finalURL}"/>`)
+            $("input#embed-code").val(`<img src="${finalURL}" width="85%" class="counter-w"/>`)
 
             $("input#gif-url").val(finalURL);
 
@@ -140,7 +125,7 @@
     </div>
     <div class="row m-0" style="width: 100%">
         <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-xs-12 bg-secondary text-light">
-            <div class="pt-5 pb-5 px-4">
+            <div class="pt-2 pb-5 px-4">
                 <div class="mb-3 mt-3">
                     <label for="event-date" class="form-label">Event Date :</label>
                     <input type="datetime-local" class="form-control" id="event-date" onchange="onFieldChange()">
@@ -152,22 +137,28 @@
                 <fieldset class="mb-3 mt-3">
                     <legend>Color</legend>
                     <div class="row">
-                        <div class="col-lg-4 col-md-6 col-sm-4 col-xs-4">
+                        <div class="col-lg-6 col-md-6 col-sm-4 col-xs-4 mb-2">
                             <div class="">
                                 <label for="bg-color" class="form-label">Background Color :</label>
                                 <input type="color" class="form-control" id="bg-color" onchange="onFieldChange()">
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-6 col-sm-4 col-xs-4">
+                        <div class="col-lg-6 col-md-6 col-sm-4 col-xs-4 mb-2">
                             <div class="">
                                 <label for="text-color" class="form-label">Text Color :</label>
                                 <input type="color" class="form-control" id="text-color" onchange="onFieldChange()">
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-6 col-sm-4 col-xs-4">
+                        <div class="col-lg-6 col-md-6 col-sm-4 col-xs-4 mb-2">
                             <div class="">
-                                <label for="stroke-color" class="form-label">Line Color :</label>
-                                <input type="color" class="form-control" id="stroke-color" onchange="onFieldChange()">
+                                <label for="stroke1-color" class="form-label">Stroke 1 Color :</label>
+                                <input type="color" class="form-control" id="stroke1-color" onchange="onFieldChange()">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-4 col-xs-4 mb-2">
+                            <div class="">
+                                <label for="stroke2-color" class="form-label">Stroke 2 Color :</label>
+                                <input type="color" class="form-control" id="stroke2-color" onchange="onFieldChange()">
                             </div>
                         </div>
                     </div>
@@ -186,35 +177,6 @@
                         </div>
                         <div id="collapseOne" class="collapse" data-bs-parent="#accordion">
                             <div class="card-body bg-secondary">
-                                <fieldset class="mb-3">
-                                    <legend>Time Text</legend>
-                                    <div class="row">
-                                        <div class="col-lg-6 col-md-6 col-sm-4 col-xs-4 mb-3">
-                                            <div class="">
-                                                <label for="days-text" class="form-label">Days :</label>
-                                                <input type="text" class="form-control" id="days-text" onchange="onFieldChange()"> 
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6 col-md-6 col-sm-4 col-xs-4 mb-3">
-                                            <div class="">
-                                                <label for="hours-text" class="form-label">Hours :</label>
-                                                <input type="text" class="form-control" id="hours-text" onchange="onFieldChange()">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6 col-md-6 col-sm-4 col-xs-4 mb-3">
-                                            <div class="">
-                                                <label for="mins-text" class="form-label">Minutes :</label>
-                                                <input type="text" class="form-control" id="mins-text" onchange="onFieldChange()">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6 col-md-6 col-sm-4 col-xs-4 mb-3">
-                                            <div class="">
-                                                <label for="seconds-text" class="form-label">Seconds :</label>
-                                                <input type="text" class="form-control" id="seconds-text" onchange="onFieldChange()">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </fieldset>
                                 <fieldset class="mb-3 mt-3">
                                     <legend>Font</legend>
                                     <div class="row">
@@ -263,7 +225,7 @@
             </div>
         </div>
         <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-xs-12 bg-dark text-light">
-            <div class="pt-5 pb-5 px-4" id="result-container">
+            <div class="pt-2 pb-5 px-4" id="result-container">
                 <div class="d-flex justify-content-center pt-0 pt-lg-5 pt-md-5 pb-2" id="image-container">
                     <img src="" id="generated-gif" />
                 </div>

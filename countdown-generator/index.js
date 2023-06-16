@@ -18,17 +18,18 @@ module.exports = {
      * @param {number} frames
      * @param {requestCallback} cb - The callback that is run once complete.
      */
-    init: function(time, width=390, height=140, color='363636', bg='ffffff', name='default', frames=30, cb, expiredText='Event Ended', timeFontSize="60", timeWordsFontSize="14", experiedTextFontSize="40", strokColor="DFE4EA", hasSeconds=true, daysText="DAYS", hoursText="HOURS", minsText="MINS", secondsText="SECONDS"){
+    init: function(time, width=632, height=158, color='363636', bg='ffffff', name='default', frames=30, cb, expiredText='Event Ended', timeFontSize="60", timeWordsFontSize="14", experiedTextFontSize="40", strokColor1="DFE4EA", hasSeconds=true, strokColor2="2C66B4"){
         // Set some sensible upper / lower bounds
         this.hasSeconds = hasSeconds == "true" ? true : false;
 
-        this.width = this.hasSeconds ? this.clamp(width+130, 150, 700) : this.clamp(width, 150, 700);
+        this.width = this.hasSeconds ? this.clamp(width, 150, 700) : this.clamp(width - 158, 150, 700);
         this.height = this.clamp(height, 40, 500);
         this.frames = this.clamp(frames, 1, 1500);
 
         this.bg = '#' + bg;
         this.textColor = '#' + color;
-        this.strokColor = '#' + strokColor;
+        this.strokColor1 = '#' + strokColor1;
+        this.strokColor2 = '#' + strokColor2;
         this.name = name;
         this.expiredText = expiredText;
         // loop optimisations
@@ -44,10 +45,10 @@ module.exports = {
         this.timeWordsFontSize = timeWordsFontSize;
         this.experiedTextFontSize = experiedTextFontSize;
 
-        this.daysText = daysText;
-        this.hoursText = hoursText;
-        this.minsText = minsText;
-        this.secondsText = secondsText;
+        this.daysText = "DAYS";
+        this.hoursText = "HOURS";
+        this.minsText = "MINUTES";
+        this.secondsText = "SECONDS";
 
         this.fontFamily = "helvetica";
 
@@ -122,7 +123,7 @@ module.exports = {
         let fontSize = this.timeFontSize + 'px';
         let fontFamily = this.fontFamily; // monospace works slightly better
         
-        this.timeStartHeight = (this.height / 2) - 20;
+        this.timeStartHeight = (this.height / 2) - 10;
         this.textStartHeight = (this.height / 2) + (parseInt(this.timeFontSize) / 3) + 10;
         
         // set the font style
@@ -180,32 +181,84 @@ module.exports = {
                         // set the font style
                         ctx.font = [fontWeight, fontSize, fontFamily].join(' ');
                         
-                        ctx.fillText(this.daysText, (this.width / 2) - ((this.width / 2) / 2) - (((this.width / 2) / 2) / 2), this.textStartHeight);
-                        ctx.fillText(this.hoursText, (this.width / 2) - ((this.width / 2) / 2) + (((this.width / 2) / 2) / 2), this.textStartHeight);
-                        ctx.fillText(this.minsText, (this.width / 2) + ((this.width / 2) / 2) - (((this.width / 2) / 2) / 2), this.textStartHeight);
-                        ctx.fillText(this.secondsText, (this.width / 2) + ((this.width / 2) / 2) + (((this.width / 2) / 2) / 2), this.textStartHeight);
+                        ctx.fillText(days < 2 ? this.daysText.slice(0, -1) : this.daysText, (this.width / 2) - ((this.width / 2) / 2) - (((this.width / 2) / 2) / 2), this.textStartHeight);
+                        ctx.fillText(hours < 2 ? this.hoursText.slice(0, -1) : this.hoursText, (this.width / 2) - ((this.width / 2) / 2) + (((this.width / 2) / 2) / 2), this.textStartHeight);
+                        ctx.fillText(minutes < 2 ? this.minsText.slice(0, -1) : this.minsText, (this.width / 2) + ((this.width / 2) / 2) - (((this.width / 2) / 2) / 2), this.textStartHeight);
+                        ctx.fillText(seconds < 2 ? this.secondsText.slice(0, -1) : this.secondsText, (this.width / 2) + ((this.width / 2) / 2) + (((this.width / 2) / 2) / 2), this.textStartHeight);
 
-                        ctx.strokeStyle = this.strokColor;
+                        // ctx.strokeStyle = this.strokColor1;
+                        // ctx.beginPath();
+                        // ctx.moveTo((this.width / 4), 20);
+                        // ctx.lineTo((this.width / 4), 120);
+                        // ctx.stroke();
+
+                        
+                        // ctx.beginPath();
+                        // ctx.moveTo(this.width / 2, 20);
+                        // ctx.lineTo(this.width / 2, 120);
+                        // ctx.stroke();
+                        
+                        // ctx.beginPath();
+                        // ctx.moveTo((this.width * 3 / 4), 20);
+                        // ctx.lineTo((this.width * 3 / 4), 120);
+                        // ctx.stroke();
+
+
+                        /** Arc Start */
+
+                        /** Background arc Start */
+                        ctx.strokeStyle = this.strokColor2;
+                        ctx.lineWidth = 7;
                         ctx.beginPath();
-                        ctx.moveTo((this.width / 4), 20);
-                        ctx.lineTo((this.width / 4), 120);
+                        ctx.arc(this.width / 8, this.height / 2, 70, 0, 2 * Math.PI);
+                        ctx.stroke();
+
+                        ctx.beginPath();
+                        ctx.arc((3 * this.width / 8), this.height / 2, 70, 0, 2 * Math.PI);
                         ctx.stroke();
 
                         
                         ctx.beginPath();
-                        ctx.moveTo(this.width / 2, 20);
-                        ctx.lineTo(this.width / 2, 120);
+                        ctx.arc((5 * this.width / 8), this.height / 2, 70, 0, 2 * Math.PI);
                         ctx.stroke();
+
+                        ctx.beginPath();
+                        ctx.arc((7 * this.width / 8), this.height / 2, 70, 0, 2 * Math.PI);
+                        ctx.stroke();
+
+                        /** Background arc End */
+
+                        /** Foreground arc Start */
+
+                        ctx.strokeStyle = this.strokColor1;
+                        ctx.lineWidth = 7.8;
+                        ctx.beginPath();
+                        ctx.arc(this.width / 8, this.height / 2, 70, (3 * Math.PI / 2) + (2 * Math.PI) + (days * 2 * Math.PI / 50), 3 * Math.PI / 2);
+                        ctx.stroke();
+
                         
                         ctx.beginPath();
-                        ctx.moveTo((this.width * 3 / 4), 20);
-                        ctx.lineTo((this.width * 3 / 4), 120);
+                        ctx.arc((3 * this.width / 8), this.height / 2, 70, (3 * Math.PI / 2) + (2 * Math.PI) + (hours * 2 * Math.PI / 24), 3 * Math.PI / 2);
                         ctx.stroke();
+
+                        
+                        ctx.beginPath();
+                        ctx.arc((5 * this.width / 8), this.height / 2, 70, (3 * Math.PI / 2) + (2 * Math.PI) + (minutes * 2 * Math.PI / 60), 3 * Math.PI / 2);
+                        ctx.stroke();
+
+                        ctx.beginPath();
+                        // ctx.arc((7 * this.width / 8), this.height / 2, 70, seconds != 0 ? (3 * Math.PI / 2) + (seconds * 2 * Math.PI / 60) : (3 * Math.PI / 2) + (2 * Math.PI), 3 * Math.PI / 2);
+                        ctx.arc((7 * this.width / 8), this.height / 2, 70, (3 * Math.PI / 2) + (2 * Math.PI) + (seconds * 2 * Math.PI / 60), 3 * Math.PI / 2);
+                        ctx.stroke();
+
+                        /** Foreground arc End */
+
+                        /** Arc End */
                     }
                     else {
-                        ctx.fillText(days, (this.width / 2) - 130, this.timeStartHeight);
+                        ctx.fillText(days, this.width / 6, this.timeStartHeight);
                         ctx.fillText(hours, this.width / 2, this.timeStartHeight);
-                        ctx.fillText(minutes, this.width / 2 + 130, this.timeStartHeight);
+                        ctx.fillText(minutes, 5 * this.width / 6, this.timeStartHeight);
 
                         
                         let fontWeight = "bold"
@@ -216,21 +269,63 @@ module.exports = {
                         // set the font style
                         ctx.font = [fontWeight, fontSize, fontFamily].join(' ');
                         
-                        ctx.fillText(this.daysText, this.width / 2 - 130, this.textStartHeight);
-                        ctx.fillText(this.hoursText, this.width / 2, this.textStartHeight);
-                        ctx.fillText(this.minsText, this.width / 2 + 130, this.textStartHeight);
+                        ctx.fillText(days < 2 ? this.daysText.slice(0, -1) : this.daysText, this.width / 6, this.textStartHeight);
+                        ctx.fillText(hours < 2 ? this.hoursText.slice(0, -1) : this.hoursText, this.width / 2, this.textStartHeight);
+                        ctx.fillText(minutes < 2 ? this.minsText.slice(0, -1) : this.minsText, 5 * this.width / 6, this.textStartHeight);
 
-                        ctx.strokeStyle = this.strokColor;
+                        // ctx.strokeStyle = this.strokColor1;
+                        // ctx.beginPath();
+                        // ctx.moveTo(this.width / 2 - 65, 20);
+                        // ctx.lineTo(this.width / 2 - 65, 120);
+                        // ctx.stroke();
+
+                        
+                        // ctx.beginPath();
+                        // ctx.moveTo(this.width / 2 + 65, 20);
+                        // ctx.lineTo(this.width / 2 + 65, 120);
+                        // ctx.stroke();
+
+                        /** Arc Start */
+
+                        /** Background arc Start */
+                        ctx.strokeStyle = this.strokColor2;
+                        ctx.lineWidth = 7;
                         ctx.beginPath();
-                        ctx.moveTo(this.width / 2 - 65, 20);
-                        ctx.lineTo(this.width / 2 - 65, 120);
+                        ctx.arc(this.width / 6, this.height / 2, 70, 0, 2 * Math.PI);
+                        ctx.stroke();
+
+                        ctx.beginPath();
+                        ctx.arc((this.width / 2), this.height / 2, 70, 0, 2 * Math.PI);
                         ctx.stroke();
 
                         
                         ctx.beginPath();
-                        ctx.moveTo(this.width / 2 + 65, 20);
-                        ctx.lineTo(this.width / 2 + 65, 120);
+                        ctx.arc((5 * this.width / 6), this.height / 2, 70, 0, 2 * Math.PI);
                         ctx.stroke();
+
+                        /** Background arc End */
+
+                        /** Foreground arc Start */
+
+                        ctx.strokeStyle = this.strokColor1;
+                        ctx.lineWidth = 7.8;
+                        ctx.beginPath();
+                        ctx.arc(this.width / 6, this.height / 2, 70, (3 * Math.PI / 2) + (2 * Math.PI) + (days * 2 * Math.PI / 100), 3 * Math.PI / 2);
+                        ctx.stroke();
+
+                        
+                        ctx.beginPath();
+                        ctx.arc(this.width / 2, this.height / 2, 70, (3 * Math.PI / 2) + (2 * Math.PI) + (hours * 2 * Math.PI / 24), 3 * Math.PI / 2);
+                        ctx.stroke();
+
+                        
+                        ctx.beginPath();
+                        ctx.arc((5 * this.width / 6), this.height / 2, 70, (3 * Math.PI / 2) + (2 * Math.PI) + (minutes * 2 * Math.PI / 60), 3 * Math.PI / 2);
+                        ctx.stroke();
+
+                        /** Foreground arc End */
+
+                        /** Arc End */
                     }
                     /**Custom Start */
                     
@@ -283,6 +378,7 @@ module.exports = {
             ctx.fillStyle = this.textColor;
             ctx.fillText(this.expiredText, this.halfWidth, this.halfHeight);
             enc.addFrame(ctx);
+            
         }
         
         // finish the gif
