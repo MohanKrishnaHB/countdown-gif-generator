@@ -76,7 +76,7 @@ module.exports = {
      */
     time: function (timeString) {
         // grab the current and target time
-        let target = moment(timeString);
+        let target = moment(timeString.replace(" ", "+"));
         let current = moment();
         
         // difference between the 2 (in ms)
